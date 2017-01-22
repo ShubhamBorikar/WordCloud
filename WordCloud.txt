@@ -1,0 +1,31 @@
+library(tm)
+
+library(wordcloud)
+
+library(RColorBrewer)
+
+fname ="C://Shubham//R projects and data//Word Cloud//data.txt"
+
+data_txt = readLines(fname)
+
+wc<-Corpus(VectorSource(data_txt))
+
+wc_data<-tm_map(wc,stripWhitespace)
+
+wc_data<-tm_map(wc_data,tolower)
+
+wc_data <- tm_map(wc, PlainTextDocument)
+
+wc_data<-tm_map(wc_data,removeNumbers)
+
+wc_data<-tm_map(wc_data,removePunctuation)
+
+wc_data<-tm_map(wc_data,removeWords, stopwords("english"))
+
+tdm_wc<-TermDocumentMatrix (wc_data) 
+
+TDM1<-as.matrix(tdm_wc) 
+
+v = sort(rowSums(TDM1), decreasing = TRUE) 
+
+wordcloud(names(v),v,scale=c(4,0.5),min.freq=2,max.words=100,colors=brewer.pal(8, "Dark2"))
